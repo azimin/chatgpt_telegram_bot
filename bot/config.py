@@ -1,5 +1,6 @@
 import yaml
 import dotenv
+import os
 from pathlib import Path
 
 config_dir = Path(__file__).parent.parent.resolve() / "config"
@@ -12,8 +13,19 @@ with open(config_dir / "config.yml", 'r') as f:
 config_env = dotenv.dotenv_values(config_dir / "config.env")
 
 # config parameters
-telegram_token = config_yaml["telegram_token"]
-openai_api_key = config_yaml["openai_api_key"]
+telegram_token_os = os.environ.get('telegram_token')
+openai_api_key_os = os.environ.get('openai_api_key')
+
+if telegram_token_os:
+    telegram_token = telegram_token_os
+else:
+    telegram_token = config_yaml["telegram_token"]
+
+if openai_api_key_os:
+    openai_api_key = openai_api_key_os
+else:
+    openai_api_key = config_yaml["openai_api_key"]
+
 use_chatgpt_api = config_yaml.get("use_chatgpt_api", True)
 allowed_telegram_usernames = config_yaml["allowed_telegram_usernames"]
 new_dialog_timeout = config_yaml["new_dialog_timeout"]
